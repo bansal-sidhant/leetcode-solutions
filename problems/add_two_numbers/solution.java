@@ -3,67 +3,63 @@
  * public class ListNode {
  *     int val;
  *     ListNode next;
- *     ListNode(int x) { val = x; }
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-import java.lang.Math;
-
 class Solution {
-    ListNode head;
-    
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode out = null;
+       /* if(l1.val==0 && l2.val==0) {
+            out = new ListNode(0);
+            return out;
+        } */
         int carry = 0;
-        while(l1 != null || l2 != null ) {
-            int sum = 0;
-            if(l1 == null && l2 != null) {
-                sum = l2.val;
-                l2 = l2.next;
-            } else if(l2 == null && l1 != null) {
-                sum = l1.val;
-                l1 = l1.next;
-            } else {
-            sum = l1.val + l2.val;
-            l1 = l1.next;
-            l2 = l2.next;
-            }
-            sum = sum+carry;
-            if((sum/10) == 0) {
-                push(sum);
-                carry=0;
-            } else {
-                push((sum%10)); 
+       // System.out.println(l1.val);
+       // System.out.println(l2.val);
+        int sum = l1.val + l2.val;
+        
+        if((sum/10) != 0) {                
                 carry = sum/10;
-                                   
+            }
+          int  number = sum % 10;
+        out = new ListNode(number);
+        ListNode newOut = out;
+        while(l1.next != null || l2.next != null) {
+            
+            
+            int first = 0;
+            int second = 0;
+            //int number = 0;
+            if(l1.next != null) {
+                l1 = l1.next;
+                first = l1.val;
             }
             
+            if(l2.next!= null) {
+                l2 = l2.next;
+                second = l2.val;
+            }
+            
+            sum = carry + first + second;
+            carry = 0;
+            if((sum/10) != 0) {                
+                carry = sum/10;
+            }
+            number = sum % 10;
+           // System.out.println(number);
+            ListNode newNode = new ListNode(number);
+            newOut.next = newNode;
+            newOut = newNode;
+                       
         }
-        if(carry!=0) {
-            push(carry);
+        
+        if(carry > 0) {
+             ListNode newNode = new ListNode(carry);
+            newOut.next = newNode;
         }
-        return reverse(head);
-    }
-    
-    public void push (int value) {
-        ListNode newNode = new ListNode(value);
         
-        newNode.next = head;
-        
-        head = newNode;
-        
-    }
-    
-    public ListNode reverse(ListNode head) {
-        ListNode prev = null;
-        ListNode current = head;
-        ListNode next = null; 
-        while(current != null) {
-            next= current.next;
-            current.next = prev;
-            prev= current;
-            current = next;
-        }
-        head = prev;
-        
-        return head;
+       return out;
     }
 }
